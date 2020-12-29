@@ -3,7 +3,7 @@
 @section('title', 'product')
 
 @section('content_header')
-    <h1>Product List</h1>
+    <h1>Ürünler</h1>
 @stop
 
 @section('content')
@@ -12,9 +12,6 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        {{-- <h3 class="card-title">Fixed Header Table</h3>
-                        --}}
-
                         <div class="card-tools">
                             <form action="{{ route('products.index') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -83,15 +80,15 @@
                                         </td>
                                         <td>
                                             @if ($product->tax_type == 1)
-                                            {{ $product->tax + $product->product_price}}
+                                                {{ $product->tax + $product->product_price }}
                                             @else
-                                                Yüzdelik Vergi
+                                                controller içinde olacak
                                             @endif
-                                            
+
                                         </td>
 
-                                        <td><img src="{{ $product->image }}" alt="{{ $product->image_alt_text }}"
-                                                width="100" height="100"></td>
+                                        <td><img src="{{ Storage::url($product->image) }}"
+                                                alt="{{ $product->image_alt_text }}" width="100" height="100"></td>
                                         <td class="text-center">
                                             <a href="{{ route('products.show', $product->product_id) }}"
                                                 class="btn btn-info">Göster</a>
@@ -101,8 +98,9 @@
                                                 class="btn btn-warning">Düzele</a>
                                         </td>
                                         <td class="text-center">
-                                            <form action="{{ route('products.destroy', $product->product_id) }}"
-                                                method="product">
+                                            <form
+                                                action="{{ action('App\Http\Controllers\Admin\ProductController@destroy', $product->product_id) }}"
+                                                method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-danger" type="submit">Sil</button>
@@ -137,12 +135,18 @@
         }
 
     </style>
-    <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}">
+    {{--
+    <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}"> --}}
 @stop
 
 @section('js')
-    <script>
-        console.log('Hi!');
-
-    </script>
+    @if (session('message'))
+        <script>
+            Swal.fire(
+                'Başarılı!',
+                '{{session('message')}}',
+                'success'
+            )
+        </script>
+    @endif
 @stop

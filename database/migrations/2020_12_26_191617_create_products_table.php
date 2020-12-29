@@ -18,13 +18,13 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('product_id')->index();
             $table->string('name');
-            $table->longText('description');
-            $table->float('price')->default(0);
+            $table->longText('description')->nullable();
+            $table->float('price')->default(0)->nullable();
             $table->float('price_new')->nullable();
-            $table->string('image');
-            $table->string('image_alt_text');
-            $table->tinyInteger('tax_type');//1 fixed tax 2 percantage tax
-            $table->float('tax');
+            $table->string('image')->nullable();
+            $table->string('image_alt_text')->nullable();
+            $table->tinyInteger('tax_type')->default(1);//1 fixed tax 2 percantage tax
+            $table->float('tax')->default(0)->nullable();
             $table->string('category_id')->nullable();
             $table->timestamps();
             $table->softDeletesTz();
