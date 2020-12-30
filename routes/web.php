@@ -24,8 +24,13 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
+
 Route::prefix('admin')->group(function () {
     Route::resources([
         'products'=>ProductController::class
     ]);
+});
+
+Route::get('/deneme', function () {
+    return view('theme.home');
 });
