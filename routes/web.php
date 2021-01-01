@@ -31,6 +31,21 @@ Route::prefix('admin')->group(function () {
     ]);
 });
 
-Route::get('/deneme', function () {
+Route::get('/home', function () {
     return view('theme.home');
+});
+Route::get('/category', function () {
+    return view('theme.category');
+});
+Route::get('/product', function () {
+    return view('theme.product-detail');
+});
+Route::get('/cart', function () {
+    return view('theme.cart');
+});
+Route::get('/checkout', function () {
+    return view('theme.checkout');
+});
+Route::get('/login-register', function () {
+    return view('theme.login-register');
 });

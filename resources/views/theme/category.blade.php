@@ -4,16 +4,14 @@
 
 
 @section('content')
-  
-    <x-home.featured-product :sliders="['http://ecommerce.test/storage/resim1.jpg','https://picsum.photos/1920/800','http://ecommerce.test/storage/resim2.jpg']"/>
-    <x-home.product-filter-by-category />
+    <x-home.product-filter-by-category filter="open"/>
 @endsection
 
 @section('css')
     <style>
-        /* body {
+        body {
             background-color: red;
-        } */
+        }
 
     </style>
 @endsection

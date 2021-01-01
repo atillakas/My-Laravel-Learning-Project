@@ -80,7 +80,6 @@ $('.htc__product__container').imagesLoaded( function() {
         columnWidth: '.single__pro',
       }
     });
-
 });
 
 $('.product__menu button').on('click', function(event) {
