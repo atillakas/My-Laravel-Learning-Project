@@ -40,7 +40,7 @@ class Product extends Model
      */
     protected static function booted()
     {
-        //veri tabanında işlem olduğunda productCacheRepository üzerinden alınan cachleri temizle
+        //When the database makes an insert, update, or delete action removes all cache data.
         static::updated(function ($product) {
             Cache::flush();
         });

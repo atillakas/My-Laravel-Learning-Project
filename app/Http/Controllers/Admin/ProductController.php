@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Contracts\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
@@ -54,20 +56,10 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
 
-        $validated = $request->validate([
-            'name' => 'required|unique:products|max:255',
-            'description' => 'nullable',
-            'price' => 'numeric|nullable',
-            'price_new' => 'numeric|nullable',
-            'image_alt_text' => 'nullable',
-            'tax_type' => 'numeric|nullable',
-            'tax' => 'numeric|nullable',
-            'image' => 'mimes:jpeg,jpg,png',
-            'slug' => 'unique:products|max:255'
-        ]);
+        $validated = $request->validated();
 
         if (isset($request->image)) {
             $fileName = $request->image->getClientOriginalName();
@@ -77,7 +69,9 @@ class ProductController extends Controller
             $validated['image'] = $newImageName; //change default name with $newImageName
         }
 
-        $this->productRepository->createProduct($validated);
+        if(!$this->productRepository->createProduct($validated)){
+            return redirect(route('products.index'))->with('fail', 'Ürün Oluşturulurken Hata Oluştu');
+        }
 
         return redirect(route('products.index'))->with('message', 'Ürün Başarıyla Oluşturuldu');
     }
@@ -113,28 +107,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-
-        $validated = $request->validate([
-            'name' => [
-                'required',
-                'max:255',
-                Rule::unique('products')->ignore($id),
-            ],
-            'slug' => [
-                'required',
-                'max:255',
-                Rule::unique('products')->ignore($id),
-            ],
-            'description' => 'nullable',
-            'price' => 'numeric|nullable',
-            'price_new' => 'numeric|nullable',
-            'image_alt_text' => 'nullable',
-            'tax_type' => 'numeric|nullable',
-            'tax' => 'numeric|nullable',
-            'image' => 'mimes:jpeg,jpg,png',
-        ]);
+        $validated = $request->validated();
 
         if (isset($request->image)) {
             $fileName = $request->image->getClientOriginalName();
