@@ -21,13 +21,17 @@
                                 </ul>
                             </div>
                         @endif
-                        <form method="POST" action="{{ action('App\Http\Controllers\Admin\ProductController@update',$product->product_id) }}"
+                        <form method="POST" action="{{ action('App\Http\Controllers\Admin\ProductController@update',$product->id) }}"
                             enctype="multipart/form-data">
                             @method('PATCH')
                             @csrf
                             <div class="form-group">
                                 <label for="product-name">Başlık</label>
                                 <input type="text" value="{{ $product->name }}" name="name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="product-name">Seo Url</label>
+                                <input type="text" value="{{ $product->slug }}" name="slug" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="product-description">İçerik</label>

@@ -57,7 +57,7 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
-            'engine' => null,//mysql charset tablo hatasına istinaden innodb motoru ayarla
+            'engine' => 'InnoDB',//mysql charset tablo hatasına istinaden innodb motoru ayarla
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],

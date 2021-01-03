@@ -37,6 +37,10 @@
                                 <input type="text" value="{{ $product->name }}" name="name" class="form-control">
                             </div>
                             <div class="form-group">
+                                <label for="product-name">Seo Url</label>
+                                <input type="text" value="{{ $product->slug }}" name="slug" class="form-control">
+                            </div>
+                            <div class="form-group">
                                 <label for="product-description">İçerik</label>
                                 <textarea name="description" class="form-control"
                                     rows="4">{{ $product->description }}</textarea>

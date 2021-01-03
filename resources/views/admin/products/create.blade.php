@@ -3,7 +3,7 @@
 @section('title', 'Post')
 
 @section('content_header')
-    <h1>Yeni Ürün</h1>
+    <h1>Ürün Ekle</h1>
 @stop
 
 @section('content')
@@ -27,6 +27,10 @@
                             <div class="form-group">
                                 <label for="product-name">Başlık</label>
                                 <input type="text" name="name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="product-name">Seo Url</label>
+                                <input type="text" name="slug" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="product-description">İçerik</label>

@@ -2,12 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
-use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rule;
+
 
 class ProductController extends Controller
 {
+
+    private $productRepository;
+
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,17 +27,13 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $term = $request->s;
-        $maxRecordViewLimit = 10; //Maximum number of records show to user
-
         if ($term) {
-            //search as fulltext
+            //if you get some error when try to searching, add name and description table fulltext search 
             $data['term'] = $term;
-            $productPaginate  = Product::whereRaw("MATCH (name) AGAINST (? IN BOOLEAN MODE) OR MATCH (description) AGAINST (? IN BOOLEAN MODE)", array($term, $term))->Paginate($maxRecordViewLimit)->withQueryString();
+            $data['products']  = $this->productRepository->paginateProductBySearchingTerm($term);
         } else {
-            $productPaginate = Product::Paginate($maxRecordViewLimit)->withQueryString();
+            $data['products'] =  $this->productRepository->paginateProduct();
         }
-
-        $data['products'] = $productPaginate;
 
         return view('admin.products.index', $data);
     }
@@ -58,7 +65,8 @@ class ProductController extends Controller
             'image_alt_text' => 'nullable',
             'tax_type' => 'numeric|nullable',
             'tax' => 'numeric|nullable',
-            'image' => 'mimes:jpeg,jpg,png'
+            'image' => 'mimes:jpeg,jpg,png',
+            'slug' => 'unique:products|max:255'
         ]);
 
         if (isset($request->image)) {
@@ -69,7 +77,7 @@ class ProductController extends Controller
             $validated['image'] = $newImageName; //change default name with $newImageName
         }
 
-        Product::create($validated);
+        $this->productRepository->createProduct($validated);
 
         return redirect(route('products.index'))->with('message', 'Ürün Başarıyla Oluşturuldu');
     }
@@ -82,7 +90,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $data['product'] = Product::findOrFail($id);
+        $data['product'] = $this->productRepository->findOrFail($id);
         return view('admin.products.show', $data);
     }
 
@@ -94,8 +102,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $data['product'] = Product::findOrFail($id);
-        return view('admin.products.edit', ['product' => Product::findOrFail($id)]);
+        $data['product'] = $this->productRepository->findOrFail($id);
+        return view('admin.products.edit', $data);
     }
 
     /**
@@ -107,15 +115,25 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $validated = $request->validate([
-            'name' => 'required|unique:products|max:255',
+            'name' => [
+                'required',
+                'max:255',
+                Rule::unique('products')->ignore($id),
+            ],
+            'slug' => [
+                'required',
+                'max:255',
+                Rule::unique('products')->ignore($id),
+            ],
             'description' => 'nullable',
             'price' => 'numeric|nullable',
             'price_new' => 'numeric|nullable',
             'image_alt_text' => 'nullable',
             'tax_type' => 'numeric|nullable',
             'tax' => 'numeric|nullable',
-            'image' => 'mimes:jpeg,jpg,png'
+            'image' => 'mimes:jpeg,jpg,png',
         ]);
 
         if (isset($request->image)) {
@@ -126,7 +144,7 @@ class ProductController extends Controller
             $validated['image'] = $newImageName; //change default name with $newImageName
         }
 
-        Product::where('product_id', $id)->update($validated);
+        $this->productRepository->updateProduct($id, $validated);
 
         return redirect(route('products.index'))->with('message', 'Ürün Başarıyla Güncellendi');
     }
@@ -139,7 +157,11 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        Product::find($id)->delete();
+        if(!$this->productRepository->deleteProduct($id)){
+            Cache::flush();//silinme hatalarında cache temizle 
+            return redirect(route('products.index'))->with('fail', 'Ürün Silinirken Hata Oluştu');
+        }
         return redirect(route('products.index'))->with('message', 'Ürün Başarıyla Silindi');
+       
     }
 }

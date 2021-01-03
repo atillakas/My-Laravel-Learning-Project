@@ -16,8 +16,9 @@ class CreateProductsTable extends Migration
     {
         
         Schema::create('products', function (Blueprint $table) {
-            $table->bigIncrements('product_id')->index();
+            $table->id()->index();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->longText('description')->nullable();
             $table->float('price')->default(0)->nullable();
             $table->float('price_new')->nullable();
@@ -28,6 +29,7 @@ class CreateProductsTable extends Migration
             $table->string('category_id')->nullable();
             $table->timestamps();
             $table->softDeletesTz();
+            
         });
         // DB::statement('ALTER TABLE products ADD FULLTEXT full(name, description)');
     }

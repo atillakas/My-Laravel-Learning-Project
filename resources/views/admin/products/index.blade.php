@@ -36,7 +36,8 @@
                         <table class="table table-head-fixed text-nowrap">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" onclick="$('input[name*=\'selected\']').trigger('click');">
+                                    <th>
+                                        <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);">
                                     </th>
                                     <th>ID</th>
                                     <th>Başlık</th>
@@ -55,9 +56,9 @@
 
                                 @foreach ($products as $product)
                                     <tr>
-                                        <td><input type="checkbox" name="selected[]" value="{{ $product->product_id }}">
+                                        <td><input type="checkbox" name="selected[]" value="{{ $product->id }}">
                                         </td>
-                                        <td>{{ $product->product_id }}</td>
+                                        <td>{{ $product->id }}</td>
                                         <td>{{ $product->name }}</td>
                                         <td>{{ substr($product->description, 0, 50) }}...</td>
                                         <td>
@@ -87,19 +88,26 @@
 
                                         </td>
 
-                                        <td><img src="{{ Storage::url($product->image) }}"
-                                                alt="{{ $product->image_alt_text }}" width="100" height="100"></td>
+                                        <td>
+                                            @if ($product->image)
+                                            {{-- <img src="{{ Storage::url($product->image) }}" alt="{{ $product->image_alt_text }}" width="100" height="100"> --}}
+                                            <img src="{{$product->image}}" alt="{{ $product->image_alt_text }}" width="100" height="100">
+                                            @else
+                                            Resim yok
+                                            @endif
+                                            
+                                        </td>
                                         <td class="text-center">
-                                            <a href="{{ route('products.show', $product->product_id) }}"
+                                            <a href="{{ route('products.show', $product->id) }}"
                                                 class="btn btn-info">Göster</a>
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('products.edit', $product->product_id) }}"
+                                            <a href="{{ route('products.edit', $product->id) }}"
                                                 class="btn btn-warning">Düzele</a>
                                         </td>
                                         <td class="text-center">
                                             <form
-                                                action="{{ action('App\Http\Controllers\Admin\ProductController@destroy', $product->product_id) }}"
+                                                action="{{ action('App\Http\Controllers\Admin\ProductController@destroy', $product->id) }}"
                                                 method="post">
                                                 @csrf
                                                 @method('DELETE')
@@ -144,8 +152,17 @@
         <script>
             Swal.fire(
                 'Başarılı!',
-                '{{session('message')}}',
+                '{{ session('message') }}',
                 'success'
+            )
+        </script>
+    @endif
+    @if (session('fail'))
+        <script>
+            Swal.fire(
+                'Silinirken Hata Oluştu!',
+                '{{ session('message') }}',
+                'error'
             )
         </script>
     @endif
