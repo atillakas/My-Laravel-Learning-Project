@@ -18,7 +18,7 @@ class Product extends Model
     [
         "name",
         "slug",
-        "content",
+        "description",
         "price",
         "price_new",
         "image",

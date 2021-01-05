@@ -16,4 +16,8 @@ return [
     'important'                     => 'Önemli',
     'warning'                       => 'Uyarı',
     'information'                   => 'Bilgi',
+    'products'                      => 'Ürünler',
+    'create_product'                => 'Ürün Ekle',
+    'categories'                    => 'Kategoriler',
+    'create_category'               => 'Kategori Ekle',
 ];

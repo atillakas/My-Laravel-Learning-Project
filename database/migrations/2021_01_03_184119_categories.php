@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
-class ProductImage extends Migration
+class Categories extends Migration
 {
     /**
      * Run the migrations.
@@ -14,17 +14,18 @@ class ProductImage extends Migration
      */
     public function up()
     {
-        Schema::create('product_images', function (Blueprint $table) {
-            $table->bigIncrements('image_id');
-            $table->bigInteger('product_id');
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id()->index();
+            $table->string('name');
+            $table->string('slug');
+            $table->text('description');
             $table->string('image');
             $table->string('image_alt_text');
-            $table->integer('sort_order');
+            $table->nestedSet();
             $table->timestamps();
             $table->softDeletesTz();
         });
-
-        Artisan::call('db:seed', array('--class' => 'ProductSeeder'));
+        Artisan::call('db:seed', array('--class' => 'CategorySeeder'));
     }
 
     /**
@@ -34,6 +35,6 @@ class ProductImage extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_images');
+        Schema::dropIfExists('categories');
     }
 }

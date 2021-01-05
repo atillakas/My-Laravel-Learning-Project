@@ -255,6 +255,17 @@ return [
                 [
                     'text' => 'create_product',
                     'url'  => 'admin/products/create',
+                    'active' => ['regex:@admin\/products\/[0-9].*@']
+                ],
+                [
+                    'text' => 'categories',
+                    'url'  => 'admin/categories',
+                ],
+
+                [
+                    'text' => 'create_category',
+                    'url'  => 'admin/categories/create',
+                    'active' => ['regex:@admin\/categories\/[0-9].*@']
                 ],
             ],
         ],

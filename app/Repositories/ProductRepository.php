@@ -7,7 +7,7 @@ use App\Models\Product;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    const MAX_SHOW_PAGE = 15;
+    const MAX_SHOW_PAGE = 5;
 
     public function paginateProduct()
     {

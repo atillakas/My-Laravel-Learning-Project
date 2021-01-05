@@ -6,10 +6,7 @@ use App\Contracts\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\Rule;
-
 
 class ProductController extends Controller
 {

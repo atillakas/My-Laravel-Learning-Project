@@ -37,16 +37,15 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);">
+                                        <input type="checkbox"
+                                            onclick="$('input[name*=\'selected\']').prop('checked', this.checked);">
                                     </th>
                                     <th>ID</th>
                                     <th>Başlık</th>
-                                    <th>İçerik</th>
                                     <th>Fiyat</th>
                                     <th>Vergi Türü</th>
                                     <th>Vergili Fiyatı</th>
                                     <th>Resim</th>
-                                    <th>Durum</th>
                                     <th class="text-center">Göster</th>
                                     <th class="text-center">Düzenle</th>
                                     <th class="text-center">Sil</th>
@@ -56,11 +55,18 @@
 
                                 @foreach ($products as $product)
                                     <tr>
-                                        <td><input type="checkbox" name="selected[]" value="{{ $product->id }}">
+                                        <td>
+                                            <input type="checkbox" name="selected[]" value="{{ $product->id }}">
                                         </td>
-                                        <td>{{ $product->id }}</td>
-                                        <td>{{ $product->name }}</td>
-                                        <td>{{ substr($product->description, 0, 50) }}...</td>
+                                        <td>
+                                            <div class="text-truncate align-middle">{{ $product->id }}</div>
+                                        </td>
+                                        <td>
+                                            <span class="d-inline-block text-truncate align-middle"
+                                                style="max-width: 300px;">
+                                                {{ $product->name }}
+                                            </span>
+                                        </td>
                                         <td>
                                             @if ($product->price_new)
                                                 <span style="color:red">{{ $product->price_new }}</span>
@@ -73,39 +79,51 @@
                                         </td>
                                         <td>
                                             @if ($product->tax_type == 1)
-                                                Sabit Vergi
+                                                <span class="d-inline-block text-truncate" style="max-width: 100px;">
+                                                    Sabit Vergi
+                                                </span>
                                             @else
-                                                Yüzdelik Vergi
+                                                <span class="d-inline-block text-truncate" style="max-width: 100px;">
+                                                    Yüzdelik Vergi
+                                                </span>
                                             @endif
 
                                         </td>
                                         <td>
                                             @if ($product->tax_type == 1)
-                                                {{ $product->tax + $product->product_price }}
+                                                <span class="d-inline-block text-truncate" style="max-width: 50px;">
+                                                    {{ $product->tax + $product->product_price }}
+                                                </span>
                                             @else
-                                                controller içinde olacak
+                                                <span class="d-inline-block text-truncate" style="max-width: 50px;">
+                                                    hesapla
+                                                </span>
                                             @endif
 
                                         </td>
 
                                         <td>
                                             @if ($product->image)
-                                            {{-- <img src="{{ Storage::url($product->image) }}" alt="{{ $product->image_alt_text }}" width="100" height="100"> --}}
-                                            <img src="{{$product->image}}" alt="{{ $product->image_alt_text }}" width="100" height="100">
+                                                {{-- <img
+                                                    src="{{ Storage::url($product->image) }}"
+                                                    alt="{{ $product->image_alt_text }}" width="100" height="100">
+                                                --}}
+                                                <img src="{{ $product->image }}" alt="{{ $product->image_alt_text }}"
+                                                    width="100" height="100">
                                             @else
-                                            Resim yok
+                                                Resim yok
                                             @endif
-                                            
+
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center align-middle">
                                             <a href="{{ route('products.show', $product->id) }}"
                                                 class="btn btn-info">Göster</a>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center align-middle">
                                             <a href="{{ route('products.edit', $product->id) }}"
                                                 class="btn btn-warning">Düzele</a>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center align-middle">
                                             <form
                                                 action="{{ action('App\Http\Controllers\Admin\ProductController@destroy', $product->id) }}"
                                                 method="post">
@@ -141,6 +159,9 @@
         .alert {
             margin: 10px;
         }
+        .table{
+            overflow: hidden !important;
+        }
 
     </style>
     {{--
@@ -152,18 +173,22 @@
         <script>
             Swal.fire(
                 'Başarılı!',
-                '{{ session('message') }}',
+                '{{ session('
+                message ') }}',
                 'success'
             )
+
         </script>
     @endif
     @if (session('fail'))
         <script>
             Swal.fire(
                 'Silinirken Hata Oluştu!',
-                '{{ session('message') }}',
+                '{{ session('
+                message ') }}',
                 'error'
             )
+
         </script>
     @endif
 @stop

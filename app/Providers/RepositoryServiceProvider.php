@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Contracts\CategoryRepositoryInterface;
 use App\Contracts\ProductRepositoryInterface;
+use App\Models\Category;
+use App\Repositories\CategoryRepository;
+use App\Repositories\Decorator\CategoryBreadcrumbDecorator;
 use App\Repositories\ProductCacheRepository;
-use App\Repositories\ProductCacheFacadeRepository;
+
 use App\Repositories\ProductRepository;
+use App\Repositories\Proxy\CategoryCacheProxy;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -24,6 +29,14 @@ class RepositoryServiceProvider extends ServiceProvider
             return $cacheRepository;
         });
 
+        $this->app->singleton(CategoryRepositoryInterface::class,function(){
+            $categoryRepository = new CategoryRepository();
+            $categoryModel = new Category();
+            $categoryBreadCrumbsDecorator = new CategoryBreadcrumbDecorator($categoryRepository,$categoryModel);
+            // $cacheCategoryProxy = new CategoryCacheProxy($categoryRepository,$this->app['cache.store']);
+            $cacheCategoryProxy = new CategoryCacheProxy($categoryBreadCrumbsDecorator,$this->app['cache.store']);
+            return $cacheCategoryProxy;
+        });
         //facade
         // $this->app->singleton(ProductRepositoryInterface::class,function(){
         //     $productRepository = new ProductRepository;
