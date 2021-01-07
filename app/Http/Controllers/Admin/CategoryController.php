@@ -44,7 +44,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $data['categories'] = $this->categoryRepository->allCategories() ?? [];
+        $data['categories'] = $this->categoryRepository->allCategories();
         return view('admin.categories.create', $data);
     }
 
