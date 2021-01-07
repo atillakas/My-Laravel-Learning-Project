@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 
+@section('plugins.summernote', true)
 @section('title', 'Post')
 
 @section('content_header')
@@ -34,7 +35,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="product-description">İçerik</label>
-                                <textarea name="description" class="form-control" rows="4"></textarea>
+                                <textarea name="description" class="form-control summernote" rows="4"></textarea>
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -70,14 +71,9 @@
 @stop
 
 @section('css')
-   
-    {{--
-    <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+
 @stop
 
 @section('js')
-    <script type="text/javascript">
-
-
-    </script>
+    <x-admin.file-manager-js />
 @stop

@@ -74,7 +74,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the product resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -86,7 +86,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the product resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -98,7 +98,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the product resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -122,7 +122,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the product resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

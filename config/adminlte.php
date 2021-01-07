@@ -403,6 +403,16 @@ return [
                 ],
             ],
         ],
+        'TinyMce' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'assets/tinymce/tinymce.min.js',
+                ],
+            ],
+        ],
     ],
 
     /*

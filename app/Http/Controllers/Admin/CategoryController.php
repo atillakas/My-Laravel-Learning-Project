@@ -45,7 +45,6 @@ class CategoryController extends Controller
     public function create()
     {
         $data['categories'] = $this->categoryRepository->allCategories() ?? [];
-
         return view('admin.categories.create', $data);
     }
 
@@ -58,7 +57,7 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         $validated = $request->validated();
-
+       
         if (isset($request->image)) {
             $fileName = $request->image->getClientOriginalName();
             $extension = $request->image->extension(); //.jpg, .png etc...
@@ -75,7 +74,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the category resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -88,7 +87,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the category resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -101,7 +100,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the category resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -127,7 +126,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the category resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

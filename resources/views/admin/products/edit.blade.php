@@ -21,7 +21,8 @@
                                 </ul>
                             </div>
                         @endif
-                        <form method="POST" action="{{ action('App\Http\Controllers\Admin\ProductController@update',$product->id) }}"
+                        <form method="POST"
+                            action="{{ action('App\Http\Controllers\Admin\ProductController@update', $product->id) }}"
                             enctype="multipart/form-data">
                             @method('PATCH')
                             @csrf
@@ -44,7 +45,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="product-discount-price">Fiyat İndirimli</label>
-                                <input type="text" value="{{$product->price_new}}" name="price_new" class="form-control">
+                                <input type="text" value="{{ $product->price_new }}" name="price_new" class="form-control">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -91,8 +92,7 @@
                                 </select>
                             </div>
 
-                            <input type="submit" value="Ürün Güncelle"
-                                class="btn btn-success float-right">
+                            <input type="submit" value="Ürün Güncelle" class="btn btn-success float-right">
 
                         </form>
 
@@ -138,14 +138,9 @@
         }
 
     </style>
-
-    {{--
-    <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+    
 @stop
 
 @section('js')
-    <script type="text/javascript">
-
-
-    </script>
+    <x-admin.file-manager-js />
 @stop

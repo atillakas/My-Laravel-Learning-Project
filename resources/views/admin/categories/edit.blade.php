@@ -81,13 +81,8 @@
 
 @section('css')
 
-    {{--
-    <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')
-    <script type="text/javascript">
-
-
-    </script>
+    <x-admin.file-manager-js />
 @stop

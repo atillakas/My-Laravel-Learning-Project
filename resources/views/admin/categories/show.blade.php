@@ -34,8 +34,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="product-description">İçerik</label>
-                                <textarea name="description" value="{{ $category->description }}" class="form-control"
-                                    rows="4"></textarea>
+                                <textarea name="description" class="form-control"
+                                    rows="4">{{ $category->description }}</textarea>
                             </div>
                             <div class="form-group">
                                 <label for="product-image-alt-text">Kategori Resimi</label>
@@ -83,13 +83,8 @@
 
 @section('css')
 
-    {{--
-    <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')
-    <script type="text/javascript">
-
-
-    </script>
+    <x-admin.file-manager-js />
 @stop

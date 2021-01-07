@@ -51,7 +51,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="product-discount-price">Fiyat İndirimli</label>
-                                <input type="text" value="{{$product->price_new}}" name="price_new" class="form-control">
+                                <input type="text" value="{{ $product->price_new }}" name="price_new" class="form-control">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -145,14 +145,8 @@
         }
 
     </style>
-
-    {{--
-    <link rel="stylesheet" href="/css/admin_custom.css"> --}}
 @stop
 
 @section('js')
-    <script type="text/javascript">
-
-
-    </script>
+    <x-admin.file-manager-js />
 @stop

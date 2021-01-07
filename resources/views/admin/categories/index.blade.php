@@ -42,7 +42,6 @@
                                     </th>
                                     <th>ID</th>
                                     <th>Başlık</th>
-                                    <th>İçerik</th>
                                     <th>Resim</th>
                                     <th class="text-center">Göster</th>
                                     <th class="text-center">Düzenle</th>
@@ -63,12 +62,6 @@
                                             <span class="d-inline-block text-truncate align-middle"
                                                 style="max-width: 400px;">
                                                 {!! $category->name !!}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="d-inline-block text-truncate align-middle"
-                                                style="max-width: 300px;">
-                                                {{ $category->description }}
                                             </span>
                                         </td>
                                         <td>
@@ -131,8 +124,6 @@
         }
 
     </style>
-    {{--
-    <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}"> --}}
 @stop
 
 @section('js')
