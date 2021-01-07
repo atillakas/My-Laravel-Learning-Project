@@ -18,14 +18,14 @@ class Categories extends Migration
             $table->id()->index();
             $table->string('name');
             $table->string('slug');
-            $table->text('description');
-            $table->string('image');
-            $table->string('image_alt_text');
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
+            $table->string('image_alt_text')->nullable();
             $table->nestedSet();
             $table->timestamps();
             $table->softDeletesTz();
         });
-        Artisan::call('db:seed', array('--class' => 'CategorySeeder'));
+        // Artisan::call('db:seed', array('--class' => 'CategorySeeder'));
     }
 
     /**

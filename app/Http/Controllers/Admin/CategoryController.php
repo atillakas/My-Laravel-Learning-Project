@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Contracts\CategoryRepositoryInterface;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -24,10 +24,10 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        
+
         $term = $request->s;
         if ($term) {
-            //if you get some error when try to searching, add name and description table fulltext search 
+            //if you get some error when try to searching, add name and description table fulltext search
             $data['term'] = $term;
             $data['categories']  = $this->categoryRepository->paginateCategoryBySearchingTerm($term);
         } else {
@@ -44,7 +44,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $data['categories'] = $this->categoryRepository->allCategories() ?? [];
+
+        return view('admin.categories.create', $data);
     }
 
     /**
@@ -53,9 +55,23 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        if (isset($request->image)) {
+            $fileName = $request->image->getClientOriginalName();
+            $extension = $request->image->extension(); //.jpg, .png etc...
+            $newImageName = pathinfo($fileName, PATHINFO_FILENAME) . "-" . uniqid() . "." . $extension; // output like that : image-321568754.jpg
+            $request->image->storeAs('public', $newImageName); //store to folder -> storage/public
+            $validated['image'] = $newImageName; //change default name with $newImageName
+        }
+
+        if (!$this->categoryRepository->createCategory($validated)) {
+            return redirect(route('categories.index'))->with('fail', 'Kategori Oluşturulurken Hata Oluştu');
+        }
+
+        return redirect(route('categories.index'))->with('message', 'Kategori Başarıyla Oluşturuldu');
     }
 
     /**
@@ -66,7 +82,9 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $data['categories'] = $this->categoryRepository->orWhereNotDescendantOf($id);
+        $data['category'] = $this->categoryRepository->findOrFail($id);
+        return view('admin.categories.show', $data);
     }
 
     /**
@@ -77,7 +95,9 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['categories'] = $this->categoryRepository->orWhereNotDescendantOf($id);
+        $data['category'] = $this->categoryRepository->findOrFail($id);
+        return view('admin.categories.edit', $data);
     }
 
     /**
@@ -87,9 +107,23 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+
+        if (isset($request->image)) {
+            $fileName = $request->image->getClientOriginalName();
+            $extension = $request->image->extension(); //.jpg, .png etc...
+            $newImageName = pathinfo($fileName, PATHINFO_FILENAME) . "-" . uniqid() . "." . $extension; // output like that : image-321568754.jpg
+            $request->image->storeAs('public', $newImageName); //store to folder -> storage/public
+            $validated['image'] = $newImageName; //change default name with $newImageName
+        }
+
+        if (!$this->categoryRepository->updateCategory($id, $validated)) {
+            return redirect(route('categories.index'))->with('fail', 'Kategori Oluşturulurken Hata Oluştu');
+        }
+
+        return redirect(route('categories.index'))->with('message', 'Kategori Başarıyla Oluşturuldu');
     }
 
     /**
@@ -100,64 +134,10 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ($this->categoryRepository->deleteCategory($id)) {
+            return redirect(route('categories.index'))->with('message', 'Kategori Başarıyla Silindi');
+        }
+
+        return redirect(route('categories.index'))->with('message', 'Kategori Silinirken Kırılma Meydana Geldi Bütünlüğü Kontrol Edin.');
     }
 }
-
-
-
-// $data = [
-//     'id' => 9,
-//     'name' => 'Foo',
-//     'children' => [
-//         [
-//             'id' => 10,
-//             'name' => 'Bar',
-//         ],
-//     ],
-//     'children' => [
-//         [
-//             'id' => 11,
-//             'name' => 'Baz',
-//         ],
-//     ],
-// ];
-// $data2 = [
-//     'id' => 9,
-//     'name' => 'Ayakkabı',
-//     'children' => [
-//         [
-//             'id' => 10,
-//             'name' => 'Babet',
-//         ],
-//         [
-//             'id' => 11,
-//             'name' => 'Kundura',
-//         ],
-//     ],
-// ];
-
-// // dd(Category::create($data2));
-// Category::fixTree();
-// $nodes = Category::get()->toFlatTree();
-
-// foreach ($nodes as $category) {
-//     $result = Category::defaultOrder()->ancestorsAndSelf($category->id)->toArray();
-//     $breadCrumb = implode(">", array_column($result, "name"));
-//     echo $breadCrumb ."<br>";
-// }
-
-// // $traverse = function ($categories, $prefix = '-') use (&$traverse) {
-// //     foreach ($categories as $category) {
-
-// //         echo PHP_EOL . $prefix . ' ' . $category->name. "<br>";
-
-// //         $traverse($category->children, $prefix . '-');
-// //     }
-// // };
-
-// // $traverse($nodes);
-
-
-// // var_dump(Category::isBroken());
-// // var_dump(Category::countErrors());

@@ -9,6 +9,17 @@ class CategoryRepository implements CategoryRepositoryInterface
 {
     const MAX_SHOW_PAGE = 15;
 
+    public function allCategories()
+    {
+        return Category::All();
+    }
+
+    public function orWhereNotDescendantOf($id)
+    {
+        $node = Category::find($id);
+        return Category::orWhereNotDescendantOf($node)->get();
+    }
+
     public function paginateCategory()
     {
         return Category::Paginate(self::MAX_SHOW_PAGE)->withQueryString();
@@ -36,10 +47,21 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function deleteCategory($CategoryID)
     {
-        $Category = Category::find($CategoryID);
-        if ($Category != null) {
-            return $Category->delete();
+        $node = Category::find($CategoryID); //Find which node will be deleted
+        $parent_id = $node->parent_id; //Get node of parent_id that will be delete
+        $findNextChildren = Category::where("parent_id", $node->id); //Find children nodes
+        $findNextChildren->update(['parent_id' => $parent_id]); //Assign node of parent id to children nodes of  parent id
+        Category::fixTree(); //Attention : Before deleting the node, you must fix the table otherwise all child nodes will be deleted with together main node.
+
+        //Find the same node, that node's disconnected with the children nodes anymore you can delete safely.
+        $nodeDelete = Category::find($CategoryID);
+        $nodeDelete->delete();
+
+        //Fix the table again against the broken
+        if (Category::isBroken()) {
+            Category::fixTree();
+            return false;
         }
-        return false;
+        return true;
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Kalnoy\Nestedset\NodeTrait;
 
 class Category extends Model
@@ -16,8 +17,12 @@ class Category extends Model
     protected $fillable =
     [
         "name",
+        "slug",
         "description",
-        "parent_id"
+        "image_alt_text",
+        "image",
+        "parent_id",
+        "deleted_at"
     ];
 
     //generate slug before save on database
@@ -27,12 +32,23 @@ class Category extends Model
     }
 
     /**
- * Get the user's full name.
- *
- * @return string
- */
-// public function getNameAttribute()
-// {
-//     return $this->slug . " denemeleri";
-// }
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        //When the database makes an insert, update, or delete action removes all cache data.
+        static::updated(function ($category) {
+            Cache::flush();
+        });
+        static::created(function ($category) {
+            Cache::flush();
+        });
+        static::deleted(function ($category) {
+            Cache::flush();
+        });
+        
+    }
+
 }

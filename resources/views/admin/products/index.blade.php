@@ -173,8 +173,7 @@
         <script>
             Swal.fire(
                 'Başarılı!',
-                '{{ session('
-                message ') }}',
+                '{!! session('message') !!}',
                 'success'
             )
 
@@ -184,8 +183,7 @@
         <script>
             Swal.fire(
                 'Silinirken Hata Oluştu!',
-                '{{ session('
-                message ') }}',
+                '{!! session('message') !!}',
                 'error'
             )
 

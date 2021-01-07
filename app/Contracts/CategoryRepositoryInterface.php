@@ -4,6 +4,9 @@ namespace App\Contracts;
 
 interface CategoryRepositoryInterface
 {
+    public function allCategories();
+
+    public function orWhereNotDescendantOf(int $id);
 
     public function paginateCategory();
 

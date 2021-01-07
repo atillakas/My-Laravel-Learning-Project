@@ -3,7 +3,7 @@
 @section('title', 'Post')
 
 @section('content_header')
-    <h1>Ürün Güncelle</h1>
+    <h1>Kategori Düzenle</h1>
 @stop
 
 @section('content')
@@ -21,83 +21,55 @@
                                 </ul>
                             </div>
                         @endif
-                        <form method="POST" action="{{ action('App\Http\Controllers\Admin\ProductController@update',$product->id) }}"
+                        <form method="POST"
+                            action="{{ action('App\Http\Controllers\Admin\CategoryController@update', $category->id) }}"
                             enctype="multipart/form-data">
                             @method('PATCH')
                             @csrf
                             <div class="form-group">
                                 <label for="product-name">Başlık</label>
-                                <input type="text" value="{{ $product->name }}" name="name" class="form-control">
+                                <input type="text" value="{{ $category->name }}" name="name" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="product-name">Seo Url</label>
-                                <input type="text" value="{{ $product->slug }}" name="slug" class="form-control">
+                                <input type="text" value="{{ $category->slug }}" name="slug" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="product-description">İçerik</label>
                                 <textarea name="description" class="form-control"
-                                    rows="4">{{ $product->description }}</textarea>
+                                    rows="4">{{ $category->description }}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="product-price">Fiyat</label>
-                                <input type="text" value="{{ $product->price }}" name="price" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="product-discount-price">Fiyat İndirimli</label>
-                                <input type="text" value="{{$product->price_new}}" name="price_new" class="form-control">
-                            </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                                </div>
-                                <div class="custom-file">
-                                    <input type="file" name="image" id="fileupload" class="custom-file-input"
-                                        accept="image/*">
-                                    <label class="custom-file-label" for="inputGroupFile01">Resim Seç</label>
+                                <label for="product-image-alt-text">Kategori Resimi</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" name="image" id="fileupload" class="custom-file-input"
+                                            accept="image/*">
+                                        <label class="custom-file-label" for="inputGroupFile01">Resim Seç</label>
+                                    </div>
                                 </div>
                             </div>
 
-
-
-                            <div class="image-alt-text">
+                            <div class="form-group image-alt-text">
                                 <label for="product-image-alt-text">Resim Alt Text</label>
-                                <input type="text" value="{{ $product->image_alt_text }}" name="image_alt_text"
+                                <input type="text" value="{{ $category->image_alt_text }}" name="image_alt_text"
                                     class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="tax-type">Vergi Tipi</label>
-                                <select name="tax_type" class="form-control custom-select">
-                                    @if ($product->tax_type == 1)
-                                        <option value="1" selected>Sabit</option>
-                                        <option value="2">Yüzde % </option>
-                                    @else
-                                        <option value="1">Sabit</option>
-                                        <option value="2" selected>Yüzde % </option>
-                                    @endif
-
+                                <label for="product-category">Ebeveyn Kategori</label>
+                                <select name="parent_id" class="form-control custom-select">
+                                    @foreach ($categories as $categoryItem)
+                                        @if ($categoryItem->id != $category->parent_id && $categoryItem->id != $category->id)
+                                            <option value="{{ $categoryItem->id }}">{!! $categoryItem->name !!} </option>
+                                        @endif
+                                    @endforeach
                                 </select>
                             </div>
-                            <div class="image-alt-text">
-                                <label for="tax-ratio">Vergi Oranı</label>
-                                <input type="text" value="{{ $product->tax }}" name="tax" class="form-control">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="product-category">Kategori</label>
-                                <select name="tax_type" class="form-control custom-select">
-                                    <option value="1" selected>Ayakkabı</option>
-                                    <option value="2">Çanta </option>
-                                    <option value="2">Gömlek </option>
-                                </select>
-                            </div>
-
-                            <input type="submit" value="Ürün Güncelle"
-                                class="btn btn-success float-right">
-
+                            <input type="submit" value="Kategori Düzenle" class="btn btn-success float-right">
                         </form>
-
-
-
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -108,36 +80,6 @@
 @stop
 
 @section('css')
-    <style>
-        .dropzone.dz-clickable .dz-message,
-        .dropzone.dz-clickable .dz-message * {
-            cursor: pointer;
-        }
-
-        .dropzone .dz-message {
-            font-weight: 400;
-        }
-
-        .dropzone .dz-message {
-            text-align: center;
-            margin: 2em 0;
-        }
-
-        .dz-message.needsclick {
-            padding: 15px 0;
-        }
-
-        .dropzone.dz-clickable {
-            cursor: pointer;
-        }
-
-        .dz-message {
-            border: 2px dashed #0087F7;
-            border-radius: 5px;
-            background: #e8e9ec;
-        }
-
-    </style>
 
     {{--
     <link rel="stylesheet" href="/css/admin_custom.css"> --}}

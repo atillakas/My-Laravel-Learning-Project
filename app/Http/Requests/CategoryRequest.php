@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 
-class ProductRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -40,23 +40,23 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        $categoryId = $this->route('product');
+        $productId = $this->route('product');
         return [
             'name' => [
                 'required',
                 'max:255',
                 'min:5',
-                Rule::unique('categories')->ignore($categoryId),
+                Rule::unique('products')->ignore($productId),
             ],
             'slug' => [
                 'max:255',
                 'min:5',
-                Rule::unique('categories')->ignore($categoryId),
+                Rule::unique('products')->ignore($productId),
             ],
             'description' => 'nullable',
+            'image' => 'mimes:jpeg,jpg,png',
             'image_alt_text' => 'nullable',
             'parent_id' => 'numeric|nullable',
-            'image' => 'mimes:jpeg,jpg,png',
         ];
     }
 }

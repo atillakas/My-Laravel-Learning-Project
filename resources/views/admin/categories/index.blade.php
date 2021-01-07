@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'category')
+@section('title', 'product')
 
 @section('content_header')
     <h1>Kategoriler</h1>
@@ -37,13 +37,13 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);">
+                                        <input type="checkbox"
+                                            onclick="$('input[name*=\'selected\']').prop('checked', this.checked);">
                                     </th>
                                     <th>ID</th>
                                     <th>Başlık</th>
                                     <th>İçerik</th>
                                     <th>Resim</th>
-                                    <th>Durum</th>
                                     <th class="text-center">Göster</th>
                                     <th class="text-center">Düzenle</th>
                                     <th class="text-center">Sil</th>
@@ -53,29 +53,46 @@
 
                                 @foreach ($categories as $category)
                                     <tr>
-                                        <td><input type="checkbox" name="selected[]" value="{{ $category->id }}">
+                                        <td>
+                                            <input type="checkbox" name="selected[]" value="{{ $category->id }}">
                                         </td>
-                                        <td>{{ $category->id }}</td>
-                                        <td>{!! $category->name !!}</td>
-                                        <td>{{ substr($category->description, 0, 50) }}...</td>
-
+                                        <td>
+                                            <div class="text-truncate align-middle">{{ $category->id }}</div>
+                                        </td>
+                                        <td>
+                                            <span class="d-inline-block text-truncate align-middle"
+                                                style="max-width: 400px;">
+                                                {!! $category->name !!}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="d-inline-block text-truncate align-middle"
+                                                style="max-width: 300px;">
+                                                {{ $category->description }}
+                                            </span>
+                                        </td>
                                         <td>
                                             @if ($category->image)
-                                            {{-- <img src="{{ Storage::url($category->image) }}" alt="{{ $category->image_alt_text }}" width="100" height="100"> --}}
-                                            <img src="{{$category->image}}" alt="{{ $category->image_alt_text }}" width="100" height="100">
+                                                {{-- <img
+                                                    src="{{ Storage::url($category->image) }}"
+                                                    alt="{{ $category->image_alt_text }}" width="100" height="100">
+                                                --}}
+                                                <img src="{{ $category->image }}" alt="{{ $category->image_alt_text }}"
+                                                    width="100" height="100">
                                             @else
-                                            Resim yok
+                                                Resim yok
                                             @endif
+
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center align-middle">
                                             <a href="{{ route('categories.show', $category->id) }}"
                                                 class="btn btn-info">Göster</a>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center align-middle">
                                             <a href="{{ route('categories.edit', $category->id) }}"
                                                 class="btn btn-warning">Düzele</a>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center align-middle">
                                             <form
                                                 action="{{ route('categories.destroy', $category->id) }}"
                                                 method="post">
@@ -87,18 +104,15 @@
                                     </tr>
                                     </tr>
                                 @endforeach
-
-
                             </tbody>
                         </table>
-                        {{ $categories->links() }}
                     </div>
+                    {{ $categories->links() }}
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
             </div>
         </div>
-
     </section>
 @stop
 
@@ -112,6 +126,10 @@
             margin: 10px;
         }
 
+        .table {
+            overflow: hidden !important;
+        }
+
     </style>
     {{--
     <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }}"> --}}
@@ -122,18 +140,21 @@
         <script>
             Swal.fire(
                 'Başarılı!',
-                '{{ session('message') }}',
+                '{!! session('message') !!}',
                 'success'
             )
+
         </script>
     @endif
     @if (session('fail'))
         <script>
             Swal.fire(
-                'Silinirken Hata Oluştu!',
-                '{{ session('message') }}',
+                'Hata!',
+                '{!! session('fail') !!}',
                 'error'
             )
+
         </script>
     @endif
+    
 @stop
