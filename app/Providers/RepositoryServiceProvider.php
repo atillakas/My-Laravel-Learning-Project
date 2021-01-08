@@ -7,10 +7,9 @@ use App\Contracts\ProductRepositoryInterface;
 use App\Models\Category;
 use App\Repositories\CategoryRepository;
 use App\Repositories\Decorator\CategoryBreadcrumbDecorator;
-use App\Repositories\ProductCacheRepository;
-
-use App\Repositories\ProductRepository;
 use App\Repositories\Proxy\CategoryCacheProxy;
+use App\Repositories\ProductRepository;
+use App\Repositories\Proxy\ProductCacheRepository;
 use Illuminate\Support\ServiceProvider;
 
 

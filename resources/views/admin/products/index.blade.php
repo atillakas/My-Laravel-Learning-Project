@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'product')
+@section('title', 'Ürünler')
 
 @section('content_header')
     <h1>Ürünler</h1>

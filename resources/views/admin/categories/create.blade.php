@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('plugins.summernote', true)
-@section('title', 'Post')
+@section('title', 'Kategori Düzenle')
 
 @section('content_header')
     <h1>Kategori Ekle</h1>
