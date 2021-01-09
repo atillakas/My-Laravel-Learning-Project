@@ -51,4 +51,13 @@ class Category extends Model
         
     }
 
+
+    /**
+     * The product that belong to the category.
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->as('productCategory')->withPivot('updated_at', 'created_at');
+    }
+
 }

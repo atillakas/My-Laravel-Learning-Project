@@ -25,7 +25,7 @@ class Categories extends Migration
             $table->timestamps();
             $table->softDeletesTz();
         });
-        // Artisan::call('db:seed', array('--class' => 'CategorySeeder'));
+        Artisan::call('db:seed', array('--class' => 'CategorySeeder'));
     }
 
     /**

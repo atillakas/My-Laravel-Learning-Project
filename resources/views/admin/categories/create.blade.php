@@ -54,6 +54,7 @@
                             <div class="form-group">
                                 <label for="product-category">Ebeveyn Kategori</label>
                                 <select name="parent_id" class="form-control custom-select">
+                                    <option value="0">Kategori Seçin </option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}">{!! $category->name !!} </option>
                                     @endforeach

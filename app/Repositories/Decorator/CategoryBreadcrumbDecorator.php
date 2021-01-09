@@ -22,6 +22,7 @@ class CategoryBreadcrumbDecorator implements CategoryRepositoryInterface
 
     public function allCategories()
     {
+        //attention : there are heavy query for breadcrumb
         $allCategory = $this->categoryRepository->allCategories();
         $allCategory->map(function ($item) {
             $result = $this->categoryModel->defaultOrder()->ancestorsAndSelf($item->id)->toArray();
@@ -33,6 +34,7 @@ class CategoryBreadcrumbDecorator implements CategoryRepositoryInterface
 
     public function orWhereNotDescendantOf($id)
     {
+        //attention : there are heavy query for breadcrumb
         $descendantCategories = $this->categoryRepository->orWhereNotDescendantOf($id);
         $descendantCategories->map(function ($item) {
             $result = $this->categoryModel->defaultOrder()->ancestorsAndSelf($item->id)->toArray();

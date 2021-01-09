@@ -46,17 +46,18 @@ class ProductRequest extends FormRequest
                 'required',
                 'max:255',
                 'min:5',
-                Rule::unique('categories')->ignore($categoryId),
+                // Rule::unique('categories')->ignore($categoryId),
             ],
             'slug' => [
                 'max:255',
                 'min:5',
-                Rule::unique('categories')->ignore($categoryId),
+                // Rule::unique('categories')->ignore($categoryId),
             ],
             'description' => 'nullable',
             'image_alt_text' => 'nullable',
             'parent_id' => 'numeric|nullable',
             'image' => 'mimes:jpeg,jpg,png',
+            'productCategoryId.*'=>'numeric|nullable'
         ];
     }
 }

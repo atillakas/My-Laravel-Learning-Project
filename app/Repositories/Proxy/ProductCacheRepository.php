@@ -13,7 +13,9 @@ class ProductCacheRepository implements ProductRepositoryInterface
 
     private $cache;
 
-    public function __construct(ProductRepositoryInterface $productRepository,CacheRepository $cache)
+    const CACHE_EXPIRE_TIME = 10;
+
+    public function __construct(ProductRepositoryInterface $productRepository, CacheRepository $cache)
     {
         $this->productRepository = $productRepository;
         $this->cache = $cache;
@@ -21,7 +23,7 @@ class ProductCacheRepository implements ProductRepositoryInterface
 
     public function paginateProduct()
     {
-        return $this->cache->remember('product-page-'.request('page'), 60, function (){
+        return $this->cache->remember('product-page-' . request('page'), self::CACHE_EXPIRE_TIME, function () {
             return $this->productRepository->paginateProduct();
         });
     }
@@ -37,15 +39,15 @@ class ProductCacheRepository implements ProductRepositoryInterface
     }
 
     public function findOrFail(int $id)
-    {  
-        return $this->cache->remember('product'.$id, 60, function () use ($id) {
+    {
+        return $this->cache->remember('product' . $id, self::CACHE_EXPIRE_TIME, function () use ($id) {
             return $this->productRepository->findOrFail($id);
         });
     }
 
     public function updateProduct(int $productID, array $productAttributes)
     {
-        return $this->productRepository->updateProduct($productID,$productAttributes);
+        return $this->productRepository->updateProduct($productID, $productAttributes);
     }
 
     public function deleteProduct($productID)
@@ -53,4 +55,8 @@ class ProductCacheRepository implements ProductRepositoryInterface
         return $this->productRepository->deleteProduct($productID);
     }
 
+    public function syncProductWithCategory(int $product_id, array $categories)
+    {
+        return $this->productRepository->syncProductWithCategory($product_id,$categories);
+    }
 }

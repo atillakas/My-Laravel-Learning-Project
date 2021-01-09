@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -18,7 +19,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id()->index();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->longText('description')->nullable();
             $table->float('price')->default(0)->nullable();
             $table->float('price_new')->nullable();
@@ -31,6 +32,7 @@ class CreateProductsTable extends Migration
             $table->softDeletesTz();
             
         });
+        Artisan::call('db:seed', array('--class' => 'ProductSeeder'));
         // DB::statement('ALTER TABLE products ADD FULLTEXT full(name, description)');
     }
 

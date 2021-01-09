@@ -27,6 +27,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
 Route::prefix('admin')->group(function () {
+    Route::get('deneme',[ProductController::class,'deneme'])->name("example");
     Route::resources([
         'products' => ProductController::class,
         'categories' => CategoryController::class

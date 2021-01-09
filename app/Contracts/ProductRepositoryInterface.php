@@ -16,4 +16,6 @@ interface ProductRepositoryInterface
     public function updateProduct(int $productID, array $productAttributes);
 
     public function deleteProduct($productID);
+
+    public function syncProductWithCategory(int $product_id, array $categories);
 }

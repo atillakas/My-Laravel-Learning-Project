@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\CategoryRepositoryInterface;
 use App\Contracts\ProductRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -13,9 +16,12 @@ class ProductController extends Controller
 
     private $productRepository;
 
-    public function __construct(ProductRepositoryInterface $productRepository)
+    private $categoryRepository;
+
+    public function __construct(ProductRepositoryInterface $productRepository, CategoryRepositoryInterface $categoryRepository)
     {
         $this->productRepository = $productRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -44,7 +50,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.products.create');
+        $data['categories'] = $this->categoryRepository->allCategories();
+        return view('admin.products.create', $data);
     }
 
     /**
@@ -66,9 +73,14 @@ class ProductController extends Controller
             $validated['image'] = $newImageName; //change default name with $newImageName
         }
 
-        if(!$this->productRepository->createProduct($validated)){
+        $product = $this->productRepository->createProduct($validated);
+       
+        if (!$product) {
             return redirect(route('products.index'))->with('fail', 'Ürün Oluşturulurken Hata Oluştu');
         }
+
+        //associate product with category
+        $this->productRepository->syncProductWithCategory($product->id, $request->productCategoryId ?? []);
 
         return redirect(route('products.index'))->with('message', 'Ürün Başarıyla Oluşturuldu');
     }
@@ -81,8 +93,10 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $data['product'] = $this->productRepository->findOrFail($id);
-        return view('admin.products.show', $data);
+        $product = $this->productRepository->findOrFail($id);
+        $selectedCategories = $product->categories->pluck('id');
+        $categories =  $this->categoryRepository->allCategories()->whereNotIn('id',$selectedCategories);
+        return view('admin.products.show', compact('product','categories'));
     }
 
     /**
@@ -93,8 +107,10 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $data['product'] = $this->productRepository->findOrFail($id);
-        return view('admin.products.edit', $data);
+        $product = $this->productRepository->findOrFail($id);
+        $selectedCategories = $product->categories->pluck('id');
+        $categories =  $this->categoryRepository->allCategories()->whereNotIn('id',$selectedCategories);
+        return view('admin.products.edit', compact('product','categories'));
     }
 
     /**
@@ -116,8 +132,15 @@ class ProductController extends Controller
             $validated['image'] = $newImageName; //change default name with $newImageName
         }
 
-        $this->productRepository->updateProduct($id, $validated);
-
+        $product = $this->productRepository->updateProduct($id, $validated);
+       
+        if(!$product){
+            return redirect(route('products.index'))->with('fail', 'Ürün Güncellenirken Hata Oluştu');
+        }
+       
+        //associate product with category
+        $this->productRepository->syncProductWithCategory($id, $request->productCategoryId ?? []);
+       
         return redirect(route('products.index'))->with('message', 'Ürün Başarıyla Güncellendi');
     }
 
@@ -129,11 +152,14 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        if(!$this->productRepository->deleteProduct($id)){
-            Cache::flush();//silinme hatalarında cache temizle 
+        //delete associated category with product
+        $this->productRepository->syncProductWithCategory($id,[]);
+        if (!$this->productRepository->deleteProduct($id)) {
+            Cache::flush(); //silinme hatalarında cache temizle 
             return redirect(route('products.index'))->with('fail', 'Ürün Silinirken Hata Oluştu');
         }
+
         return redirect(route('products.index'))->with('message', 'Ürün Başarıyla Silindi');
-       
     }
+
 }

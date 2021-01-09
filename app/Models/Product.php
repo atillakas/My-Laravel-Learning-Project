@@ -52,4 +52,12 @@ class Product extends Model
         });
         
     }
+
+     /**
+     * The category that belong to the product.
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class,'product_category','product_id','category_id')->withTimestamps();
+    }
 }

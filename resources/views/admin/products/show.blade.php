@@ -63,9 +63,6 @@
                                     <label class="custom-file-label" for="inputGroupFile01">Resim Seç</label>
                                 </div>
                             </div>
-
-
-
                             <div class="image-alt-text">
                                 <label for="product-image-alt-text">Resim Alt Text</label>
                                 <input type="text" value="{{ $product->image_alt_text }}" name="image_alt_text"
@@ -88,23 +85,18 @@
                                 <label for="tax-ratio">Vergi Oranı</label>
                                 <input type="text" value="{{ $product->tax }}" name="tax" class="form-control">
                             </div>
-
                             <div class="form-group">
                                 <label for="product-category">Kategori</label>
-                                <select name="tax_type" class="form-control custom-select">
-                                    <option value="1" selected>Ayakkabı</option>
-                                    <option value="2">Çanta </option>
-                                    <option value="2">Gömlek </option>
+                                <select class="categories" name="productCategoryId[]" multiple="multiple">
+                                    @foreach ($product->categories as $category)
+                                        <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
+                                    @endforeach
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
-
-                            {{-- <input type="submit" value="Create Product"
-                                class="btn btn-success float-right"> --}}
-
                         </form>
-
-
-
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -115,38 +107,10 @@
 @stop
 
 @section('css')
-    <style>
-        .dropzone.dz-clickable .dz-message,
-        .dropzone.dz-clickable .dz-message * {
-            cursor: pointer;
-        }
 
-        .dropzone .dz-message {
-            font-weight: 400;
-        }
-
-        .dropzone .dz-message {
-            text-align: center;
-            margin: 2em 0;
-        }
-
-        .dz-message.needsclick {
-            padding: 15px 0;
-        }
-
-        .dropzone.dz-clickable {
-            cursor: pointer;
-        }
-
-        .dz-message {
-            border: 2px dashed #0087F7;
-            border-radius: 5px;
-            background: #e8e9ec;
-        }
-
-    </style>
 @stop
 
 @section('js')
+    <script src="{{ asset('assets/admin/js/main.js') }}"></script>
     <x-admin.file-manager-js />
 @stop

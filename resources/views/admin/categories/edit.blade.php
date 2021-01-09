@@ -62,6 +62,7 @@
                                 <label for="product-category">Ebeveyn Kategori</label>
                                 <select name="parent_id" class="form-control custom-select">
                                     @foreach ($categories as $categoryItem)
+                                        <option value="0">Kategori Seçin </option>
                                         @if ($categoryItem->id != $category->parent_id && $categoryItem->id != $category->id)
                                             <option value="{{ $categoryItem->id }}">{!! $categoryItem->name !!} </option>
                                         @endif
